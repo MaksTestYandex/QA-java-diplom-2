@@ -32,6 +32,19 @@ public class UserRequest {
                 .then()
                 .log().all();
     }
+
+    @Step
+    public ValidatableResponse logoutUser(String logoutBody) {
+        return given()
+                .spec(RequestSpec.requestSpecification())
+                .body("{\"token\": \"" + logoutBody + "\"}")
+                .when()
+                .log().all()
+                .post(USER_PATH + "logout")
+                .then()
+                .log().all();
+    }
+
     @Step
     public ValidatableResponse deleteUser(String token) {
         return given()
@@ -40,6 +53,31 @@ public class UserRequest {
                 .when()
                 .log().all()
                 .delete(USER_PATH + "user")
+                .then()
+                .log().all();
+    }
+
+    @Step
+    public ValidatableResponse updateUser(String token, RequestUserBody userBody) {
+        return given()
+                .spec(RequestSpec.requestSpecification())
+                .header("Authorization", token)
+                .body(userBody)
+                .when()
+                .log().all()
+                .patch(USER_PATH + "user")
+                .then()
+                .log().all();
+    }
+
+    @Step
+    public ValidatableResponse updateUser(RequestUserBody userBody) {
+        return given()
+                .spec(RequestSpec.requestSpecification())
+                .body(userBody)
+                .when()
+                .log().all()
+                .patch(USER_PATH + "user")
                 .then()
                 .log().all();
     }

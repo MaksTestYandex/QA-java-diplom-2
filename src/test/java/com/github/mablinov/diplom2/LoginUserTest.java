@@ -19,7 +19,6 @@ public class LoginUserTest {
     private boolean needDeleteUser = false;
     private final RequestUserBody userBody = new RequestUserBody("testUser58@yandex.ru", "1234", "Ivan");
     private final RequestUserLoginBody userLoginBody = RequestUserLoginBody.from(userBody);
-
     private final RequestUserLoginBody userLoginBodyWithMistake = new RequestUserLoginBody("tetUser58@yandex.ru", "1234");
 
     @Before
