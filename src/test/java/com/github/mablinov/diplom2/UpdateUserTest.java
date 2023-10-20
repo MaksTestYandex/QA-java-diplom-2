@@ -39,7 +39,7 @@ public class UpdateUserTest {
 
     @Test
     @DisplayName("Check update user data ")
-    @Description("Create  user account, login it,update it | assert: status code, key value, email and Name updated")
+    @Description("Create  user account, login it, update it | assert: status code, key value, email and Name updated")
     public void shouldUpdateUserData() {
         userRequest.createNewUser(userBody);
         userLoginBodyForDelete = userLoginBody;
@@ -54,7 +54,7 @@ public class UpdateUserTest {
 
     @Test
     @DisplayName("Check update not auth user data ")
-    @Description("Create  user account,update it | assert: status code")
+    @Description("Create  user account, update it | assert: status code")
     public void shouldUpdateUserDataWithoutAuth() {
         userRequest.createNewUser(userBody);
         userLoginBodyForDelete = userLoginBody;

@@ -29,7 +29,7 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Check user authorize")
-    @Description("Create  user account, login it | assert: status code")
+    @Description("Create  user account, login it | assert: status code, key value")
     public void shouldUserAuthorize() {
         userRequest.createNewUser(userBody);
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBody);
@@ -39,7 +39,7 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Check orthography fields for login")
-    @Description("Send request with login mistake value | assert: status code, message")
+    @Description("Send request with mistake login value | assert: status code, key value")
     public void shouldVerifyRequestLoginUserWithLoginMistake() {
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBodyWithMistake);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_UNAUTHORIZED, loginUser.extract().statusCode());

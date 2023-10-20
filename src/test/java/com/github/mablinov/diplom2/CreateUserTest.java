@@ -11,16 +11,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
 public class CreateUserTest {
+    Random random = new Random();
+    private String email = "testUser" + random.nextInt(100) + "@yandex.ru";
     private UserRequest userRequest;
     private boolean needDeleteUser = false;
-    private final RequestUserBody userBody = new RequestUserBody("testUser58@yandex.ru", "1234", "Ivan");
+    private final RequestUserBody userBody = new RequestUserBody(email, "1234", "Ivan");
     private final RequestUserLoginBody userLoginBody = RequestUserLoginBody.from(userBody);
 
-    private final RequestUserBody userBodyWithoutPassword = new RequestUserBody("testUser58@yandex.ru", "", "Ivan");
+    private final RequestUserBody userBodyWithoutPassword = new RequestUserBody(email, "", "Ivan");
 
     @Before
     public void setUp() {
@@ -54,7 +57,7 @@ public class CreateUserTest {
     public void shouldNotCreateDuplicateUser() {
         userRequest.createNewUser(userBody);
         ValidatableResponse createNewUser = userRequest.createNewUser(userBody);
-        assertEquals("Status code failure!", HttpURLConnection.HTTP_CONFLICT, createNewUser.extract().statusCode());
+        assertEquals("Status code failure!", HttpURLConnection.HTTP_FORBIDDEN, createNewUser.extract().statusCode());
         needDeleteUser = true;
     }
 
