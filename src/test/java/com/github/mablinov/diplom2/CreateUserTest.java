@@ -16,8 +16,8 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 public class CreateUserTest {
-    Random random = new Random();
-    private String email = "testUser" + random.nextInt(100) + "@yandex.ru";
+    private final Random random = new Random();
+    private final String email = "testUser" + random.nextInt(100) + "@yandex.ru";
     private UserRequest userRequest;
     private boolean needDeleteUser = false;
     private final RequestUserBody userBody = new RequestUserBody(email, "1234", "Ivan");
@@ -32,19 +32,19 @@ public class CreateUserTest {
     }
 
     @Test
-    @DisplayName("Check that user account is created ")
-    @Description("Create  user account | assert: status code,message")
+    @DisplayName("Check that user account is created")
+    @Description("Create user account | assert: status code, message")
     public void shouldCreateNewUser() {
         ValidatableResponse createNewUser = userRequest.createNewUser(userBody);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_OK, createNewUser.extract().statusCode());
-        assertEquals("Key value failure!", true, createNewUser.extract().path("success"));
+        assertEquals("Success value failure!", true, createNewUser.extract().path("success"));
         needDeleteUser = true;
     }
 
     @Test
-    @DisplayName("Check that user account may delete ")
+    @DisplayName("Check that user account may delete")
     @Description("Create, login and delete user account | assert: status code")
-    public void shouldDeleteCourier() {
+    public void shouldDeleteUser() {
         userRequest.createNewUser(userBody);
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBody);
         ValidatableResponse deleteUser = userRequest.deleteUser(loginUser.extract().path("accessToken"));
@@ -52,21 +52,23 @@ public class CreateUserTest {
     }
 
     @Test
-    @DisplayName("Check that user account is unique ")
-    @Description("Try to create duplicate user account | assert: status code")
+    @DisplayName("Check that user account is unique")
+    @Description("Try to create duplicate user account | assert: status code, message")
     public void shouldNotCreateDuplicateUser() {
         userRequest.createNewUser(userBody);
         ValidatableResponse createNewUser = userRequest.createNewUser(userBody);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_FORBIDDEN, createNewUser.extract().statusCode());
+        assertEquals("Success value failure!", false, createNewUser.extract().path("success"));
         needDeleteUser = true;
     }
 
     @Test
     @DisplayName("Check necessary fields for create user account ")
-    @Description("Send request without password value  | assert: status code")
+    @Description("Send request without password value  | assert: status code, message")
     public void shouldVerifyNecessaryFieldsInRequestCreateNewUser() {
         ValidatableResponse createNewUser = userRequest.createNewUser(userBodyWithoutPassword);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_FORBIDDEN, createNewUser.extract().statusCode());
+        assertEquals("Success value failure!", false, createNewUser.extract().path("success"));
     }
 
     @After

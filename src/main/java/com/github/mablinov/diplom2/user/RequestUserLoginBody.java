@@ -11,6 +11,7 @@ public class RequestUserLoginBody {
 
     public RequestUserLoginBody() {
     }
+
     public static RequestUserLoginBody from(RequestUserBody userBody) {
         return new RequestUserLoginBody(userBody.getEmail(), userBody.getPassword());
     }

@@ -16,13 +16,13 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 public class UpdateUserTest {
-    Random random = new Random();
-    private String email = "testUser" + random.nextInt(100) + "@yandex.ru";
-    private String updatedEmail = "update" + email;
-    private String password = "1234";
-    private String updatedPassword = password + "5678";
-    private String name = "Ivan";
-    private String updatedName = name + "Update";
+    private final Random random = new Random();
+    private final String email = "testUser" + random.nextInt(100) + "@yandex.ru";
+    private final String updatedEmail = "update" + email;
+    private final String password = "1234";
+    private final String updatedPassword = password + "5678";
+    private final String name = "Ivan";
+    private final String updatedName = name + "Update";
     private UserRequest userRequest;
     private final RequestUserBody userBody = new RequestUserBody(email, password, name);
     private final RequestUserLoginBody userLoginBody = RequestUserLoginBody.from(userBody);
@@ -38,8 +38,8 @@ public class UpdateUserTest {
     }
 
     @Test
-    @DisplayName("Check update user data ")
-    @Description("Create  user account, login it, update it | assert: status code, key value, email and Name updated")
+    @DisplayName("Check update user data")
+    @Description("Create  user account, login it, update it | assert: status code, success value, email and name updated")
     public void shouldUpdateUserData() {
         userRequest.createNewUser(userBody);
         userLoginBodyForDelete = userLoginBody;
@@ -47,13 +47,13 @@ public class UpdateUserTest {
         ValidatableResponse updateUser = userRequest.updateUser(loginUser.extract().path("accessToken"), updateUserBody);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_OK, updateUser.extract().statusCode());
         userLoginBodyForDelete = updatedUserLoginBody;
-        assertEquals("Key value failure!", true, updateUser.extract().path("success"));
+        assertEquals("Success value failure!", true, updateUser.extract().path("success"));
         assertEquals("Email is not updated!", updatedEmail.toLowerCase(), updateUser.extract().path("user.email"));
         assertEquals("Name is not updated", updatedName, updateUser.extract().path("user.name"));
     }
 
     @Test
-    @DisplayName("Check update not auth user data ")
+    @DisplayName("Check update not auth user data")
     @Description("Create  user account, update it | assert: status code")
     public void shouldUpdateUserDataWithoutAuth() {
         userRequest.createNewUser(userBody);

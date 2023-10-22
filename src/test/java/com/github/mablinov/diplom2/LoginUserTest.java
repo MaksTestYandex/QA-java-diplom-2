@@ -19,7 +19,8 @@ public class LoginUserTest {
     private boolean needDeleteUser = false;
     private final RequestUserBody userBody = new RequestUserBody("testUser58@yandex.ru", "1234", "Ivan");
     private final RequestUserLoginBody userLoginBody = RequestUserLoginBody.from(userBody);
-    private final RequestUserLoginBody userLoginBodyWithMistake = new RequestUserLoginBody("tetUser58@yandex.ru", "1234");
+    private final RequestUserLoginBody userLoginBodyWithEmailMistake = new RequestUserLoginBody("tetUser58@yandex.ru", "1234");
+    private final RequestUserLoginBody userLoginBodyWithPasswordMistake = new RequestUserLoginBody("testUser58@yandex.ru", "1235");
 
     @Before
     public void setUp() {
@@ -29,8 +30,8 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Check user authorize")
-    @Description("Create  user account, login it | assert: status code, key value")
-    public void shouldUserAuthorize() {
+    @Description("Create user account, login it | assert: status code")
+    public void shouldAuthorizeUser() {
         userRequest.createNewUser(userBody);
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBody);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_OK, loginUser.extract().statusCode());
@@ -39,9 +40,18 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Check orthography fields for login")
-    @Description("Send request with mistake login value | assert: status code, key value")
-    public void shouldVerifyRequestLoginUserWithLoginMistake() {
-        ValidatableResponse loginUser = userRequest.loginUser(userLoginBodyWithMistake);
+    @Description("Send request with mistake email value | assert: status code, message")
+    public void shouldVerifyRequestLoginUserWithEmailMistake() {
+        ValidatableResponse loginUser = userRequest.loginUser(userLoginBodyWithEmailMistake);
+        assertEquals("Status code failure!", HttpURLConnection.HTTP_UNAUTHORIZED, loginUser.extract().statusCode());
+        assertEquals("Key value failure!", "email or password are incorrect", loginUser.extract().path("message").toString());
+    }
+
+    @Test
+    @DisplayName("Check orthography fields for login")
+    @Description("Send request with mistake password value | assert: status code, message")
+    public void shouldVerifyRequestLoginUserWithPasswordMistake() {
+        ValidatableResponse loginUser = userRequest.loginUser(userLoginBodyWithPasswordMistake);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_UNAUTHORIZED, loginUser.extract().statusCode());
         assertEquals("Key value failure!", "email or password are incorrect", loginUser.extract().path("message").toString());
     }

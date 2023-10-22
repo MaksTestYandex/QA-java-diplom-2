@@ -34,10 +34,10 @@ public class UserRequest {
     }
 
     @Step
-    public ValidatableResponse logoutUser(String logoutBody) {
+    public ValidatableResponse logoutUser(String token) {
         return given()
                 .spec(RequestSpec.requestSpecification())
-                .body("{\"token\": \"" + logoutBody + "\"}")
+                .body("{\"token\": \"" + token + "\"}")
                 .when()
                 .log().all()
                 .post(USER_PATH + "logout")
