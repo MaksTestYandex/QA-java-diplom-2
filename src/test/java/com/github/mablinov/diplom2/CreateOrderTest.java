@@ -79,7 +79,7 @@ public class CreateOrderTest {
         userRequest.createNewUser(userBody);
         needDeleteUser = true;
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBody);
-        ValidatableResponse createNewOrder = orderRequest.createOrderWithHashCodeMistakeIngredients(loginUser.extract().path("accessToken"), jsonIngredientsWithMistakeInFirstIngredient);
+        ValidatableResponse createNewOrder = orderRequest.createOrderWithIngredients(loginUser.extract().path("accessToken"), jsonIngredientsWithMistakeInFirstIngredient);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_OK, createNewOrder.extract().statusCode());
         assertEquals("Incorrect list size!", createNewOrder.extract().jsonPath().getList("order.ingredients").size(), 3);
     }
@@ -91,7 +91,7 @@ public class CreateOrderTest {
         userRequest.createNewUser(userBody);
         needDeleteUser = true;
         ValidatableResponse loginUser = userRequest.loginUser(userLoginBody);
-        ValidatableResponse createNewOrder = orderRequest.createOrderWithHashCodeMistakeIngredients(loginUser.extract().path("accessToken"), jsonIngredientsWithMistakeInAllIngredients);
+        ValidatableResponse createNewOrder = orderRequest.createOrderWithIngredients(loginUser.extract().path("accessToken"), jsonIngredientsWithMistakeInAllIngredients);
         assertEquals("Status code failure!", HttpURLConnection.HTTP_INTERNAL_ERROR, createNewOrder.extract().statusCode());
     }
 

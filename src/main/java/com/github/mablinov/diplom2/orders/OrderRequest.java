@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 
 public class OrderRequest {
 
-    @Step
+    @Step("Создание заказа с ингредиентами, без авторизации")
     public ValidatableResponse createOrderWithIngredients(String json) {
         return given()
                 .spec(RequestSpec.requestSpecification())
@@ -20,7 +20,7 @@ public class OrderRequest {
                 .log().all();
     }
 
-    @Step
+    @Step("Создание заказа с ингредиентами, с авторизацией")
     public ValidatableResponse createOrderWithIngredients(String token, String json) {
         return given()
                 .spec(RequestSpec.requestSpecification())
@@ -33,7 +33,7 @@ public class OrderRequest {
                 .log().all();
     }
 
-    @Step
+    @Step("Создание заказа без ингредиентов")
     public ValidatableResponse createOrderWithoutIngredients(String token) {
         return given()
                 .spec(RequestSpec.requestSpecification())
@@ -45,20 +45,7 @@ public class OrderRequest {
                 .log().all();
     }
 
-    @Step
-    public ValidatableResponse createOrderWithHashCodeMistakeIngredients(String token, String json) {
-        return given()
-                .spec(RequestSpec.requestSpecification())
-                .header("Authorization", token)
-                .body(json)
-                .when()
-                .log().all()
-                .post("/orders")
-                .then()
-                .log().all();
-    }
-
-    @Step
+    @Step("Получение списка заказов, с авторизацией")
     public ValidatableResponse getListOfOrders(String token) {
         return given()
                 .spec(RequestSpec.requestSpecification())
@@ -70,7 +57,7 @@ public class OrderRequest {
                 .log().all();
     }
 
-    @Step
+    @Step("Получение списка заказов, без авторизации")
     public ValidatableResponse getListOfOrders() {
         return given()
                 .spec(RequestSpec.requestSpecification())
